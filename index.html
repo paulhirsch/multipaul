@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+    
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>multipauls</title>
+        <meta name="description" content="An interactive getting started guide for Brackets.">
+        <link rel="stylesheet" href="main.css">
+        <script>
+            runningVideos = [];
+            
+            function switchState(obj) {
+                if(runningVideos.includes(obj)) hide(obj);
+                else show(obj);
+            }
+            
+            function show(obj) {
+              console.log('play');
+              runningVideos.push(obj);
+              obj.style.opacity = 1;
+              obj.play();
+            }
+
+            function hide(obj) {
+              console.log('hide');
+              runningVideos = runningVideos.filter(v => v !== obj);
+              obj.style.opacity = 0;
+              obj.load();
+              obj.pause();
+            }
+            
+            function runClock() {
+                console.log('tick tack')
+                var id = Math.floor(Math.random() * 8);
+                switchState(document.getElementById(id));
+                
+                setTimeout(runClock, 5000);
+            }
+        </script>
+    </head>
+    <body onload="runClock()">
+        <div class="video-container">
+            <video id="0" muted onclick="hide(this)" onended="hide(this)" src="assets/videos/video34.mp4" style="opacity: 0; margin: 2vw; max-width: 17vw;"></video>
+            <video id="1" muted onclick="hide(this)" onended="hide(this)" src="assets/videos/video36.mp4" style="opacity: 0; margin: 2vw; max-width: 17vw;"></video>
+            <video id="2" muted onclick="hide(this)" onended="hide(this)" src="assets/videos/video39.mp4" style="opacity: 0; margin: 2vw; max-width: 17vw;"></video>
+            <video id="3" muted onclick="hide(this)" onended="hide(this)" src="assets/videos/video40.mp4" style="opacity: 0; margin: 2vw; max-width: 33vw;"></video>
+            <video id="4" muted onclick="hide(this)" onended="hide(this)" src="assets/videos/video40.mp4" style="opacity: 0; margin: 2vw; max-width: 33vw;"></video>
+            <video id="5" muted onclick="hide(this)" onended="hide(this)" src="assets/videos/video39.mp4" style="opacity: 0; margin: 2vw; max-width: 17vw;"></video>
+            <video id="6" muted onclick="hide(this)" onended="hide(this)" src="assets/videos/video36.mp4" style="opacity: 0; margin: 2vw; max-width: 17vw;"></video>
+            <video id="7" muted onclick="hide(this)" onended="hide(this)" src="assets/videos/video34.mp4" style="opacity: 0; margin: 2vw; max-width: 17vw;"></video>
+        </div>
+       
+    </body>
+</html>
