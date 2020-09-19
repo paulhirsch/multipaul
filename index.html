@@ -4,51 +4,98 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>TA MERE</title>
-        <meta name="description" content="An interactive getting started guide for Brackets.">
+        <title>multipauls</title>
+        <meta name="multi-paul" content="">
         <link rel="stylesheet" href="main.css">
         <script>
             runningVideos = [];
+            CLOCK_TIME = 5000;  // c'est une bonne pratique de definir les constantes de ton code dans un endroit a part 
+                                // ca permet a la fois de les repertorier, et d'avoir la meme valeur partout où tu veux 
+                                // l'utiliser (coherance)
             
-            function switchState(obj) {
-                if(runningVideos.includes(obj)) hide(obj);
-                else show(obj);
+            // retourne une video au hasard
+            function getRandomVideo() {
+                var id = Math.floor(Math.random() * 8);
+
+                return document.getElementById(id);
             }
             
-            function show(obj) {
-              console.log('play');
-              runningVideos.push(obj);
-              obj.style.opacity = 1;
-              obj.play();
+            // retourne une video au hasard parmis celle qui sont cachées
+            function getHiddenRandomVideo() {
+                var randomVideo = getRandomVideo();
+                while (runningVideos.includes(randomVideo)) {
+                    randomVideo = getRandomVideo();
+                }
+
+                return randomVideo;
+            }
+            
+            // lance la video
+            function run(obj) {
+                runningVideos.push(obj);
+                obj.style.opacity = 1;
+                obj.play();
             }
 
+            // cache la video
             function hide(obj) {
-              console.log('hide');
-              runningVideos = runningVideos.filter(v => v !== obj);
-              obj.style.opacity = 0;
-              obj.load();
-              obj.pause();
+                runningVideos = runningVideos.filter(v => v !== obj);
+                obj.style.opacity = 0;
+                obj.load();
+                obj.pause();
             }
             
+            // cache la video en entré et lance une video au hasard parmis celle qui sont cachées
+            function hideAndRunOther(obj) {
+                if (runningVideos.includes(obj)) {
+                    run(getHiddenRandomVideo(obj));
+                    hide(obj);
+                }
+            }
+            
+            // Si la video en entrée tourne, on la cache et inversement
+            function switchState(obj) {
+                if(runningVideos.includes(obj)) hide(obj);
+                else run(obj);
+            }
+            
+            // Cette fonction est appelé au chargement de la page et s'execute toute les x secondes
+            // elle appelle switchState sur une video aléatoire à chaque execution.
             function runClock() {
-                console.log('tick tack')
-                var id = Math.floor(Math.random() * 8);
-                switchState(document.getElementById(id));
+                switchState(getRandomVideo());
                 
-                setTimeout(runClock, 5000);
+                setTimeout(runClock, CLOCK_TIME);
             }
         </script>
+        <style>
+            .video {
+                opacity: 0;
+                margin: 2vw;
+                max-width: 12vw;
+            }
+        </style>
     </head>
     <body onload="runClock()">
         <div class="video-container">
-            <video id="0" muted onclick="hide(this)" onended="hide(this)" src="assets/videos/video34.mp4" style="opacity: 0; margin: 2vw; max-width: 17vw;"></video>
-            <video id="1" muted onclick="hide(this)" onended="hide(this)" src="assets/videos/video36.mp4" style="opacity: 0; margin: 2vw; max-width: 17vw;"></video>
-            <video id="2" muted onclick="hide(this)" onended="hide(this)" src="assets/videos/video39.mp4" style="opacity: 0; margin: 2vw; max-width: 17vw;"></video>
-            <video id="3" muted onclick="hide(this)" onended="hide(this)" src="assets/videos/video40.mp4" style="opacity: 0; margin: 2vw; max-width: 33vw;"></video>
-            <video id="4" muted onclick="hide(this)" onended="hide(this)" src="assets/videos/video40.mp4" style="opacity: 0; margin: 2vw; max-width: 33vw;"></video>
-            <video id="5" muted onclick="hide(this)" onended="hide(this)" src="assets/videos/video39.mp4" style="opacity: 0; margin: 2vw; max-width: 17vw;"></video>
-            <video id="6" muted onclick="hide(this)" onended="hide(this)" src="assets/videos/video36.mp4" style="opacity: 0; margin: 2vw; max-width: 17vw;"></video>
-            <video id="7" muted onclick="hide(this)" onended="hide(this)" src="assets/videos/video34.mp4" style="opacity: 0; margin: 2vw; max-width: 17vw;"></video>
+            <!-- pour que ton code soit propre, il faut pas qu'il depasse 120 charactere pas ligne, pour ne pas avoir
+            à scroller horizontalement -->
+            <video id="0" muted onclick="hideAndRunOther(this)" onended="hideAndRunOther(this)" 
+                src="assets/videos/video34.mp4" class="video"></video>
+            <video id="1" muted onclick="hideAndRunOther(this)" onended="hideAndRunOther(this)" 
+                src="assets/videos/video36.mp4" class="video"></video>
+            <video id="2" muted onclick="hideAndRunOther(this)" onended="hideAndRunOther(this)" 
+                src="assets/videos/video39.mp4" class="video"></video>
+            <video id="3" muted onclick="hideAndRunOther(this)" onended="hideAndRunOther(this)" 
+                src="assets/videos/video40.mp4" class="video"></video>
+            <video id="4" muted onclick="hideAndRunOther(this)" onended="hideAndRunOther(this)" 
+                src="assets/videos/video40.mp4" class="video"></video>
+            <video id="5" muted onclick="hideAndRunOther(this)" onended="hideAndRunOther(this)" 
+                src="assets/videos/video39.mp4" class="video"></video>
+            <video id="6" muted onclick="hideAndRunOther(this)" onended="hideAndRunOther(this)" 
+                src="assets/videos/video36.mp4" class="video"></video>
+            <video id="7" muted onclick="hideAndRunOther(this)" onended="hideAndRunOther(this)" 
+                src="assets/videos/video34.mp4" class="video"></video>
+            <!-- quand tu ajoutes une video, penses a incrementer l'id -->
         </div>
        
     </body>
